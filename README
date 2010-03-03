@@ -8,3 +8,85 @@ MIT-License
 
 Lyo Kato, lyo.kato _at_ gmail.com
 
+= USAGE
+
+1. EmojiTextAreaを生成するビルダを準備します。
+
+import org.coderepos.text.EmojiTextArea;
+import org.coderepos.text.events.EmojiTextAreaBuildEvent;
+
+var textAreaWidth:uint  = 200;
+var textAreaHeight:uint = 200;
+
+// 最終的に生成したいテキストエリアの幅、高さを指定します。
+
+var builder:EmojiTextArea = new EmojiTextArea(200, 200);
+
+// 利用したい絵文字を登録します。
+
+// 下の例では、入力されたテキストに'[m:46]'が含まれていれば
+// その箇所を、http://img.mixi.jp/img/emoji/46.gifの画像に置き換えることになります。
+// 同様に'[m:50]'をhttp://img.mixi.jp/img/emoji/50.gifの画像に置き換えます。
+
+builder.registerByURI('[m:46]', 'http://img.mixi.jp/img/emoji/46.gif');
+builder.registerByURI('[m:50]', 'http://img.mixi.jp/img/emoji/50.gif');
+
+// イベントリスナを設定します。
+
+// 絵文字のための画像をロードし、EmojiTextAreaをビルド完了したときに呼ばれます。
+builder.addEventListener(EmojiTextAreaBuildEvent.BUILT, builtHandler);
+
+// 指定したURLから画像をロードするときに該当するエラーイベントが発生したときのため
+builder.addEventListener(IOErrorEvent.IO_ERROR, ioErrorHandler);
+builder.addEventListener(SecurityErrorEvent.SECURITY_ERROR, securityErrorHandler);
+
+
+// ビルドを開始します。
+builder.buildAsync();
+
+
+2. ビルド完了後の設定
+
+// ビルド完了用に指定しておいたハンドラで、
+// EmojiTextAreaのオブジェクトを取得する。
+
+import org.coderepos.text.EmojiTextArea;
+
+private var _emojiTextArea:EmojiTextArea;
+
+private function builtHandler(e:EmojiTextAreaBuildEvent):void
+{
+    // イベントオブジェクトのtextAreaメソッドで
+    // EmojiTextAreaのオブジェクトが取得できます。
+    _emojiTextArea:EmojiTextArea = e.textArea;
+}
+
+
+// EmojiTextAreaはflash.display.Spriteのサブクラスです。
+// 適当なコンテナの子として加えておいてください。
+
+myContainer.addChild(_emojiTextArea);
+
+3. フォーマットの設定
+
+EmojiTextAreaは、ElementFormatの各プロパティへのプロキシとなる
+getter/setterメソッドが登録されています。
+詳しくはflash.text.engine.ElementFormatのドキュメントを参照してください。
+
+_emojiTextArea.fontSize   = 20;
+var desc:FontDescription = new FontDescription();
+desc.fontName = "Kozuka Mincho Pro R";
+_emojiTextArea.fontDescription = desc;
+_emojiTextArea.locale = "ja";
+
+4. その他の設定
+
+_emojiTextArea.lineHeight = 20;
+
+5. テキストの入力
+
+// textセッタで文字列を入力します。
+// 入力する文字列中に、指定されたパターンを発見すると絵文字画像に変換して表示します。
+
+_emojiTextArea.text = "こんにちは[m:46]"
+

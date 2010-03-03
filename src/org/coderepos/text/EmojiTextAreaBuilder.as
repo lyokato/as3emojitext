@@ -114,6 +114,7 @@ package org.coderepos.text
                     _spriteStore[_currentPatern] = _loader;
                 } else {
                     clear();
+                    // XXX: or dispatch error-event?
                     throw error;
                 }
             }
