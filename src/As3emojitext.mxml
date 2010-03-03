@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:WindowedApplication 
+    xmlns:mx="http://www.adobe.com/2006/mxml" 
+    layout="vertical"
+    showStatusBar="false"
+    width="800"
+    height="600"
+    paddingTop="5"
+    paddingLeft="5"
+    paddingRight="5"
+    paddingBottom="5"
+    backgroundGradientColors="[0x0099cc, 0x006666]"
+    creationComplete="start();"
+    >  
+
+  <mx:Script>
+    <![CDATA[
+
+    import flash.display.Sprite;
+    import flash.events.IOErrorEvent;
+    import flash.events.SecurityErrorEvent;
+
+    import mx.core.UIComponent;
+
+    import flash.text.engine.ElementFormat;
+    import flash.text.engine.ContentElement;
+    import flash.text.engine.TextElement;
+    import flash.text.engine.TextBlock;
+    import flash.text.engine.TextLine;
+    import flash.text.engine.GraphicElement;
+    import flash.text.engine.GroupElement;
+    import flash.text.engine.FontDescription;
+    import flash.text.engine.EastAsianJustifier;
+    import flash.text.engine.LineJustification;
+
+    import nl.demonsters.debugger.MonsterDebugger;
+    private var _debugger:MonsterDebugger;
+
+    import org.coderepos.text.EmojiTextArea;
+    import org.coderepos.text.EmojiTextAreaBuilder;
+    import org.coderepos.text.events.EmojiTextAreaBuildEvent;
+
+    private var _builder:EmojiTextAreaBuilder;
+    private var _emojiTextArea:EmojiTextArea;
+
+    private function start():void
+    {
+        _debugger = new MonsterDebugger(this);
+        logLine("start to build");
+
+        _builder = new EmojiTextAreaBuilder();
+        // register pattern and url
+        _builder.registerByURI('[m:46]', 'http://img.mixi.jp/img/emoji/46.gif');
+        _builder.registerByURI('[m:50]', 'http://img.mixi.jp/img/emoji/50.gif');
+        // set listeners
+        _builder.addEventListener(EmojiTextAreaBuildEvent.BUILT, builtHandler);
+        _builder.addEventListener(IOErrorEvent.IO_ERROR, ioErrorHandler);
+        _builder.addEventListener(SecurityErrorEvent.SECURITY_ERROR, securityErrorHandler);
+        // start to build
+        _builder.buildAsync();
+    }
+
+    private function builtHandler(e:EmojiTextAreaBuildEvent):void
+    {
+        logLine("built");
+
+        _emojiTextArea = e.textArea;
+        _emojiTextArea.lineHeight = 20;
+        _emojiTextArea.fontSize   = 20;
+        _emojiTextArea.width      = 100;
+        _emojiTextArea.height     = 100;
+
+        var desc:FontDescription = new FontDescription();
+        desc.fontName = "Kozuka Mincho Pro R";
+        _emojiTextArea.fontDescription = desc;
+        _emojiTextArea.locale = "ja";
+
+        //_emojiTextArea.justifier = new EastAsianJustifier("ja", LineJustification.ALL_BUT_LAST);
+        _emojiTextArea.text = "ふがふが[m:46]";
+
+        var comp:UIComponent = new UIComponent();
+        comp.width  = 100;
+        comp.height = 100;
+        emojiDisplay.addChild(comp);
+
+        comp.addChild(_emojiTextArea);
+        //_emojiTextArea.width  = 200;
+        //_emojiTextArea.height = 200;
+        _emojiTextArea.x      = 100;
+        _emojiTextArea.y      = 100;
+
+        /*
+        var block:TextBlock = new TextBlock();
+        block.textJustifier = new EastAsianJustifier("ja", LineJustification.ALL_BUT_LAST);
+        var format:ElementFormat = new ElementFormat();
+        format.fontDescription = desc;
+        format.fontSize = 18;
+        format.locale = "ja";
+        var te:TextElement = new TextElement("ああああ", format);
+        var groupVector:Vector.<ContentElement> = new Vector.<ContentElement>();
+        groupVector.push(te);
+        block.content = new GroupElement(groupVector);
+        var line:TextLine = block.createTextLine(null, 300);
+        comp.addChild(line);
+        line.x = 50;
+        line.y = 50;
+        */
+    }
+
+    private function setEmojiText():void
+    {
+
+        var t:String = input.text;
+        input.text = "";
+        if (t.length > 0 && _emojiTextArea != null)
+            _emojiTextArea.text = t;
+    }
+
+    private function ioErrorHandler(e:IOErrorEvent):void
+    {
+        logLine(e.toString());
+    }
+
+    private function securityErrorHandler(e:SecurityErrorEvent):void
+    {
+        logLine(e.toString());
+    }
+
+    private function logLine(line:String):void
+    {
+        logView.text += line;
+        logView.text += "\n";
+    }
+
+    ]]>
+  </mx:Script>
+  <mx:VBox width="100%" height="100%" backgroundColor="#FFFFFF" verticalGap="0">
+    <mx:VBox id="emojiDisplay" width="100%" height="100%"/>
+    <mx:TextArea id="logView" width="100%" height="100"/>
+    <mx:HBox width="100%" height="30">
+        <mx:TextInput id="input" width="100%" height="100%"/>
+        <mx:Button label="input" width="100" height="100%" click="setEmojiText();"/>
+    </mx:HBox>
+  </mx:VBox>
+
+</mx:WindowedApplication>
