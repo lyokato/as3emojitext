@@ -26,11 +26,6 @@ package org.coderepos.text
             _lines      = new Vector.<TextLine>();
             _format     = new ElementFormat();
             _lineHeight = 20;
-
-            var mySprite:Sprite = new Sprite();
-            mySprite.graphics.lineStyle(1, 0xFFFF00);
-            mySprite.graphics.drawCircle(0 , 0, 10);
-            addChild(mySprite);
         }
 
         public function set justifier(justifier:TextJustifier):void
