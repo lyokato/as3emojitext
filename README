@@ -12,7 +12,7 @@ Lyo Kato, lyo.kato _at_ gmail.com
 
 1. EmojiTextAreaを生成するビルダを準備します。
 
-import org.coderepos.text.EmojiTextArea;
+import org.coderepos.text.EmojiTextAreaBuilder;
 import org.coderepos.text.events.EmojiTextAreaBuildEvent;
 
 var textAreaWidth:uint  = 200;
@@ -20,7 +20,7 @@ var textAreaHeight:uint = 200;
 
 // 最終的に生成したいテキストエリアの幅、高さを指定します。
 
-var builder:EmojiTextArea = new EmojiTextArea(200, 200);
+var builder:EmojiTextAreaBuilder = new EmojiTextAreaBuilder(textAreaWidth, textAreaHeight);
 
 // 利用したい絵文字を登録します。
 
