@@ -21,12 +21,16 @@ package org.coderepos.text
         private var _loading:Boolean;
         private var _loader:Loader;
         private var _currentPatern:String;
+        private var _width:uint;
+        private var _height:uint;
 
-        public function EmojiTextAreaBuilder()
+        public function EmojiTextAreaBuilder(width:uint, height:uint)
         {
             _spriteStore = {};
             _uriStore    = [];
             _loading     = false;
+            _width       = width;
+            _height      = height;
         }
 
         public function clear():void
@@ -74,7 +78,7 @@ package org.coderepos.text
                 _loader.contentLoaderInfo.removeEventListener(SecurityErrorEvent.SECURITY_ERROR, securityErrorHandler);
 
                 var engine:EmojiTextEngine = new EmojiTextEngine(_spriteStore);
-                var textarea:EmojiTextArea = new EmojiTextArea(engine);
+                var textarea:EmojiTextArea = new EmojiTextArea(engine, _width, _height);
                 clear();
                 dispatchEvent(new EmojiTextAreaBuildEvent(EmojiTextAreaBuildEvent.BUILT, textarea));
             }
@@ -124,30 +128,4 @@ package org.coderepos.text
         }
     }
 }
-
-
-/*
-
-var builder = new EmojiTextAreaBuilder();
-
-builder.registerByURI('[m:26]', '');
-builder.registerByURI('[m:59]', '');
-builder.registerByURI('[]', '');
-
-builder.addEventListener(IOErrorEvent.IO_ERROR);
-builder.addEventListener(SecurityErrorEvent.SECURITY_ERROR);
-builder.addEventListener(EmojiTextAreaBuilderEvent.BUILT, builtHandler);
-
-builder.buildAsync();
-
-private function builtHandler(e:EmojiTextAreaBuilderEvent):void
-{
-    _emojiTextArea = e.textArea;
-    _emojiTextArea.lineHeight = 20;
-    container.addChild(_emojiTextArea);
-}
-
-_emojiTextArea.text = "ほげ[m:25]ほげ";
-
-*/
 

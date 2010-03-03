@@ -48,7 +48,7 @@
         _debugger = new MonsterDebugger(this);
         logLine("start to build");
 
-        _builder = new EmojiTextAreaBuilder();
+        _builder = new EmojiTextAreaBuilder(200, 200);
         // register pattern and url
         _builder.registerByURI('[m:46]', 'http://img.mixi.jp/img/emoji/46.gif');
         _builder.registerByURI('[m:50]', 'http://img.mixi.jp/img/emoji/50.gif');
@@ -67,8 +67,8 @@
         _emojiTextArea = e.textArea;
         _emojiTextArea.lineHeight = 20;
         _emojiTextArea.fontSize   = 20;
-        _emojiTextArea.width      = 100;
-        _emojiTextArea.height     = 100;
+        //_emojiTextArea.width      = 200;
+        //_emojiTextArea.height     = 200;
 
         var desc:FontDescription = new FontDescription();
         desc.fontName = "Kozuka Mincho Pro R";
@@ -79,13 +79,11 @@
         _emojiTextArea.text = "ふがふが[m:46]";
 
         var comp:UIComponent = new UIComponent();
-        comp.width  = 100;
-        comp.height = 100;
+        comp.width  = 200;
+        comp.height = 200;
         emojiDisplay.addChild(comp);
 
         comp.addChild(_emojiTextArea);
-        //_emojiTextArea.width  = 200;
-        //_emojiTextArea.height = 200;
         _emojiTextArea.x      = 100;
         _emojiTextArea.y      = 100;
 

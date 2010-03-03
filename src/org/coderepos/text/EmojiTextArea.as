@@ -19,13 +19,22 @@ package org.coderepos.text
         private var _lineHeight:uint;
         private var _justifier:TextJustifier;
 
-        public function EmojiTextArea(engine:EmojiTextEngine)
+        public function EmojiTextArea(engine:EmojiTextEngine, w:uint, h:uint)
         {
-            //super();
             _engine     = engine;
             _lines      = new Vector.<TextLine>();
             _format     = new ElementFormat();
             _lineHeight = 20;
+
+
+            var dummy:Sprite = new Sprite();
+            dummy.graphics.lineStyle(1, 0xFFFF00);
+            dummy.graphics.drawRect(0 , 0, w, h);
+            dummy.alpha = 0;
+            addChild(dummy);
+
+            width  = w;
+            height = h;
         }
 
         public function set justifier(justifier:TextJustifier):void
@@ -236,7 +245,7 @@ package org.coderepos.text
             if (_justifier != null)
                 textBlock.textJustifier = _justifier;
             textBlock.content = _engine.genGroupElement(str, _format);
-            var line:TextLine = textBlock.createTextLine(null, this.width);
+            var line:TextLine = textBlock.createTextLine(null, width);
             var xPos:int = 0;
             var yPos:int = 0;
             while (line != null) {
@@ -245,7 +254,7 @@ package org.coderepos.text
                 line.x = xPos;
                 line.y = yPos;
                 yPos += _lineHeight;
-                line = textBlock.createTextLine(line, this.width);
+                line = textBlock.createTextLine(line, width);
             }
         }
     }
