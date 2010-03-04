@@ -1,0 +1,34 @@
+<!--
+ To build as3oauth.swc, use
+
+   compc -load-config=build-swc.xml
+   acompc -load-config=build-swc.xml
+
+ That is all.
+-->
+<flex-config>
+  <target-player>10.0.0</target-player>
+  <compiler>
+    <external-library-path>
+      <path-element>${flexlib}/libs/player/10/playerglobal.swc</path-element>
+    </external-library-path>
+    
+    <source-path>
+      <path-element>src</path-element>
+    </source-path>
+  </compiler>
+  <include-classes>
+      <class>org.coderepos.text.EmojiTextArea</class>
+      <class>org.coderepos.text.EmojiTextAreaBuilder</class>
+      <class>org.coderepos.text.EmojiTextEngine</class>
+      <class>org.coderepos.text.events.EmojiTextAreaBuildEvent</class>
+  </include-classes>
+  <metadata>
+    <creator>Lyo Kato</creator>
+    <description>http://github.com/lyokato/as3emojitext.git</description>
+    <language>EN</language>
+    <title>AS3 TextArea which includes some Emoji characters</title>
+  </metadata>
+  <output>bin/as3emojitext-1_0_1.swc</output>
+</flex-config>
+

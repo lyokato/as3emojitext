@@ -12,6 +12,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 package org.coderepos.text
 {
+    import flash.display.DisplayObject;
     import flash.display.Sprite;
     import flash.text.engine.ElementFormat;
     import flash.text.engine.ContentElement;
@@ -55,8 +56,9 @@ package org.coderepos.text
                     var matched:String = result[0];
                     lastIndex = result.index + matched.length;
                     // graphic part
-                    var symbol:* = _map[matched];
-                    groupVector.push(new GraphicElement(symbol, symbol.width, symbol.height, format));
+                    var symbol:DisplayObject = _map[matched];
+                    groupVector.push(new GraphicElement(symbol,
+                        symbol.width, symbol.height, format));
                     result = pattern.exec(src);
                 }
                 if (lastIndex < src.length) {

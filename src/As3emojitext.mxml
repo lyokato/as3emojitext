@@ -43,6 +43,9 @@
     private var _builder:EmojiTextAreaBuilder;
     private var _emojiTextArea:EmojiTextArea;
 
+    [Embed(source="assets/46.gif")]
+    private var gif46:Class;
+
     private function start():void
     {
         _debugger = new MonsterDebugger(this);
@@ -50,8 +53,8 @@
 
         _builder = new EmojiTextAreaBuilder(200, 200);
         // register pattern and url
-        _builder.registerByURI('[m:46]', 'http://img.mixi.jp/img/emoji/46.gif');
         _builder.registerByURI('[m:50]', 'http://img.mixi.jp/img/emoji/50.gif');
+        _builder.registerByDisplayObject('[m:46]', new gif46() as DisplayObject);
         // set listeners
         _builder.addEventListener(EmojiTextAreaBuildEvent.BUILT, builtHandler);
         _builder.addEventListener(IOErrorEvent.IO_ERROR, ioErrorHandler);
@@ -87,22 +90,6 @@
         _emojiTextArea.x      = 100;
         _emojiTextArea.y      = 100;
 
-        /*
-        var block:TextBlock = new TextBlock();
-        block.textJustifier = new EastAsianJustifier("ja", LineJustification.ALL_BUT_LAST);
-        var format:ElementFormat = new ElementFormat();
-        format.fontDescription = desc;
-        format.fontSize = 18;
-        format.locale = "ja";
-        var te:TextElement = new TextElement("ああああ", format);
-        var groupVector:Vector.<ContentElement> = new Vector.<ContentElement>();
-        groupVector.push(te);
-        block.content = new GroupElement(groupVector);
-        var line:TextLine = block.createTextLine(null, 300);
-        comp.addChild(line);
-        line.x = 50;
-        line.y = 50;
-        */
     }
 
     private function setEmojiText():void

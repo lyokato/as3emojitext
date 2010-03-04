@@ -17,6 +17,7 @@ package org.coderepos.text
     import flash.events.IOErrorEvent;
     import flash.events.SecurityErrorEvent;
     import flash.display.Sprite;
+    import flash.display.DisplayObject;
     import flash.display.Loader;
     import flash.display.LoaderInfo;
     import flash.display.Bitmap;
@@ -58,7 +59,7 @@ package org.coderepos.text
             _uriStore.push([pattern, uri]);
         }
 
-        public function registerBySprite(pattern:String, shape:Sprite):void
+        public function registerByDisplayObject(pattern:String, shape:DisplayObject):void
         {
             _spriteStore[pattern] = shape;
         }
@@ -108,10 +109,10 @@ package org.coderepos.text
                 bitmapData.draw(_loader);
                 bitmap = new Bitmap(bitmapData);
                 bitmap.smoothing = true;
-                _spriteStore[_currentPatern] = bitmap;
+                _spriteStore[_currentPatern] = DisplayObject(bitmap);
             } catch (error:*) {
                 if (error is SecurityErrorEvent) {
-                    _spriteStore[_currentPatern] = _loader;
+                    _spriteStore[_currentPatern] = DisplayObject(_loader);
                 } else {
                     clear();
                     // XXX: or dispatch error-event?
