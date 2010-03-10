@@ -6,6 +6,7 @@ package suite
     import org.coderepos.text.EmojiTextAreaBuilder;
     import org.coderepos.text.EmojiTextArea;
     import org.coderepos.text.EmojiTextEngine;
+    import org.coderepos.text.EmojiPatternFormat;
 
     public class LoadTest extends TestCase {
         public function LoadTest(meth:String) {
@@ -20,7 +21,7 @@ package suite
 
         public function testLoad():void
         {
-            var builder:EmojiTextAreaBuilder = new EmojiTextAreaBuilder();
+            var builder:EmojiTextAreaBuilder = new EmojiTextAreaBuilder(500, 200);
             assertEquals('', '');
         }
     }
