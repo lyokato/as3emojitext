@@ -30,9 +30,7 @@ package org.coderepos.text
         {
             _map = map;
             for (var propID:String in _map) {
-               trace("FOUND MAP ID:" + String(propID));
                for (var prop:String in _map[propID]) {
-                    trace("MAP TARGET:" + prop);
                }
             }
             _patternLength = formats.length + 1;
@@ -41,7 +39,6 @@ package org.coderepos.text
                 patterns.push(format.toRegExpString());
             }
             _pattern = patterns.join("|");
-            trace("PATTERN:" + _pattern);
         }
 
         public function genGroupElement(src:String, format:ElementFormat):GroupElement
@@ -62,7 +59,6 @@ package org.coderepos.text
                     }
                     var matched:String = result[0];
                     lastIndex = result.index + matched.length;
-                    trace("MATCHED:" + matched);
                     // graphic part
                     //var symbol:DisplayObject = _map[matched];
                     var symbol:DisplayObject = findMatchedSymbol(result);
@@ -82,10 +78,8 @@ package org.coderepos.text
         private function findMatchedSymbol(result:Object):DisplayObject
         {
             for (var i:uint = 1; i < _patternLength; i++) {
-                trace("CHECK FOR FORMAT ID:" + String(i));
                 var matched:String = result[i];
                 if (matched != null && i in _map) {
-                    trace("MATCHED DETAIL:" + matched);
                     return (matched in _map[i]) ? _map[i][matched] : null;
                 }
             }
