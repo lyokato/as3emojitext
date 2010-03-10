@@ -22,14 +22,22 @@ var textAreaHeight:uint = 200;
 
 var builder:EmojiTextAreaBuilder = new EmojiTextAreaBuilder(textAreaWidth, textAreaHeight);
 
+// 絵文字に置き換える文字列のフォーマットを生成します。
+// 生成されたフォーマットのID値がかえります。
+
+// 引数に渡すのはフォーマットのprefix, suffixです。
+// suffixは一文字である必要があります。
+var format1ID:uint = builder.genPatternFormat('[m:', ']');
+var format2ID:uint = builder.genPatternFormat('[a:', ']');
+
 // 利用したい絵文字を登録します。
 
 // 下の例では、入力されたテキストに'[m:46]'が含まれていれば
 // その箇所を、http://img.mixi.jp/img/emoji/46.gifの画像に置き換えることになります。
-// 同様に'[m:50]'をhttp://img.mixi.jp/img/emoji/50.gifの画像に置き換えます。
+// 同様に'[a:10]'をhttp://img.mixi.jp/img/emoji/50.gifの画像に置き換えます。
 
-builder.registerByURI('[m:46]', 'http://img.mixi.jp/img/emoji/46.gif');
-builder.registerByURI('[m:50]', 'http://img.mixi.jp/img/emoji/50.gif');
+builder.registerByURI(format1ID, '46', 'http://img.mixi.jp/img/emoji/46.gif');
+builder.registerByURI(format2ID, '10', 'http://img.mixi.jp/img/emoji/50.gif');
 
 // イベントリスナを設定します。
 

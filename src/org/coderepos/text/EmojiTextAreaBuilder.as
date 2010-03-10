@@ -29,39 +29,58 @@ package org.coderepos.text
 
     public class EmojiTextAreaBuilder extends EventDispatcher
     {
-        private var _spriteStore:Object; // map<Pattern, Sprite>
+        private var _shapeMap:Object;
         private var _uriStore:Array;
         private var _loading:Boolean;
         private var _loader:Loader;
-        private var _currentPatern:String;
+        private var _currentPattern:Array;
         private var _width:uint;
         private var _height:uint;
+        private var _formatIDPod:uint;
+        private var _formats:Array;
 
         public function EmojiTextAreaBuilder(width:uint, height:uint)
         {
-            _spriteStore = {};
+            _shapeMap    = {};
             _uriStore    = [];
             _loading     = false;
             _width       = width;
             _height      = height;
+            _formatIDPod = 1;
+            _formats     = [];
+        }
+
+        public function genPatternFormat(prefix:String, suffix:String):uint
+        {
+            var formatID:uint = _formatIDPod++;
+            _formats.push(new EmojiPatternFormat(prefix, suffix));
+            return formatID;
         }
 
         public function clear():void
         {
-            _spriteStore = {};
-            _uriStore    = [];
-            _loading     = false;
+            _shapeMap = {};
+            _uriStore = [];
+            _loading  = false;
         }
 
-        public function registerByURI(pattern:String, uri:String):void
+        public function registerByURI(formatID:uint, pattern:String, uri:String):void
         {
             // TODO: validation for params
-            _uriStore.push([pattern, uri]);
+            if (formatID > _formatIDPod)
+                throw new ArgumentError("Unknown format-ID: " + String(formatID));
+            _uriStore.push([formatID, pattern, uri]);
         }
 
-        public function registerByDisplayObject(pattern:String, shape:DisplayObject):void
+        public function registerByDisplayObject(formatID:uint, pattern:String,
+            shape:DisplayObject):void
         {
-            _spriteStore[pattern] = shape;
+            if (formatID > _formatIDPod)
+                throw new ArgumentError("Unknown format-ID: " + String(formatID));
+
+            if (!(formatID in _shapeMap))
+                _shapeMap[formatID] = {};
+            _shapeMap[formatID][pattern] = shape;
         }
 
         public function buildAsync():void
@@ -77,20 +96,25 @@ package org.coderepos.text
             if (_uriStore.length > 0) {
 
                 var pair:Array = _uriStore.shift();
-                _currentPatern = pair[0];
+                _currentPattern = pair;
                 _loader = new Loader();
                 _loader.contentLoaderInfo.addEventListener(Event.COMPLETE, completeHandler);
                 _loader.contentLoaderInfo.addEventListener(IOErrorEvent.IO_ERROR, ioErrorHandler);
                 _loader.contentLoaderInfo.addEventListener(SecurityErrorEvent.SECURITY_ERROR, securityErrorHandler);
-                _loader.load(new URLRequest(pair[1]), new LoaderContext(true));
+                _loader.load(new URLRequest(pair[2]), new LoaderContext(true));
 
             } else {
 
-                _loader.contentLoaderInfo.removeEventListener(Event.COMPLETE, completeHandler);
-                _loader.contentLoaderInfo.removeEventListener(IOErrorEvent.IO_ERROR, ioErrorHandler);
-                _loader.contentLoaderInfo.removeEventListener(SecurityErrorEvent.SECURITY_ERROR, securityErrorHandler);
+                if (_loader != null) {
+                    _loader.contentLoaderInfo.removeEventListener(
+                        Event.COMPLETE, completeHandler);
+                    _loader.contentLoaderInfo.removeEventListener(
+                        IOErrorEvent.IO_ERROR, ioErrorHandler);
+                    _loader.contentLoaderInfo.removeEventListener(
+                        SecurityErrorEvent.SECURITY_ERROR, securityErrorHandler);
+                }
 
-                var engine:EmojiTextEngine = new EmojiTextEngine(_spriteStore);
+                var engine:EmojiTextEngine = new EmojiTextEngine(_formats, _shapeMap);
                 var textarea:EmojiTextArea = new EmojiTextArea(engine, _width, _height);
                 clear();
                 dispatchEvent(new EmojiTextAreaBuildEvent(EmojiTextAreaBuildEvent.BUILT, textarea));
@@ -109,10 +133,10 @@ package org.coderepos.text
                 bitmapData.draw(_loader);
                 bitmap = new Bitmap(bitmapData);
                 bitmap.smoothing = true;
-                _spriteStore[_currentPatern] = DisplayObject(bitmap);
+                registerByDisplayObject(_currentPattern[0], _currentPattern[1], DisplayObject(bitmap));
             } catch (error:*) {
                 if (error is SecurityErrorEvent) {
-                    _spriteStore[_currentPatern] = DisplayObject(_loader);
+                    registerByDisplayObject(_currentPattern[0], _currentPattern[1], DisplayObject(_loader));
                 } else {
                     clear();
                     // XXX: or dispatch error-event?
