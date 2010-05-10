@@ -14,6 +14,8 @@ package org.coderepos.text
 {
     import flash.display.DisplayObject;
     import flash.display.Sprite;
+    import flash.display.Bitmap;
+    import flash.display.BitmapData;
     import flash.text.engine.ElementFormat;
     import flash.text.engine.ContentElement;
     import flash.text.engine.TextElement;
@@ -29,10 +31,6 @@ package org.coderepos.text
         public function EmojiTextEngine(formats:Array, map:Object)
         {
             _map = map;
-            for (var propID:String in _map) {
-               for (var prop:String in _map[propID]) {
-               }
-            }
             _patternLength = formats.length + 1;
             var patterns:Array = [];
             for each(var format:EmojiPatternFormat in formats) {
@@ -62,9 +60,10 @@ package org.coderepos.text
                     // graphic part
                     //var symbol:DisplayObject = _map[matched];
                     var symbol:DisplayObject = findMatchedSymbol(result);
-                    if (symbol != null)
+                    if (symbol != null) {
                         groupVector.push(new GraphicElement(symbol,
                             symbol.width, symbol.height, format));
+                    }
                     result = pattern.exec(src);
                 }
                 if (lastIndex < src.length) {
@@ -80,7 +79,16 @@ package org.coderepos.text
             for (var i:uint = 1; i < _patternLength; i++) {
                 var matched:String = result[i];
                 if (matched != null && i in _map) {
-                    return (matched in _map[i]) ? _map[i][matched] : null;
+                    if (matched in _map[i]) {
+                        var symbol:DisplayObject = _map[i][matched];
+                        var bitmapData:BitmapData = new BitmapData(symbol.width, symbol.height, true, 0x00000000);
+                        bitmapData.draw(symbol);
+                        var bitmap:Bitmap = new Bitmap(bitmapData);
+                        bitmap.smoothing = true;
+                        return DisplayObject(bitmap);
+                    } else {
+                        return null;
+                    }
                 }
             }
             return null;

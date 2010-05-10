@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<componentPackage>
+<component id="EmojiPatternFormat" class="org.coderepos.text.EmojiPatternFormat"/>
+<component id="EmojiTextArea" class="org.coderepos.text.EmojiTextArea"/>
+<component id="EmojiTextAreaBuilder" class="org.coderepos.text.EmojiTextAreaBuilder"/>
+<component id="EmojiTextEngine" class="org.coderepos.text.EmojiTextEngine"/>
+<component id="EmojiTextAreaBuildEvent" class="org.coderepos.text.events.EmojiTextAreaBuildEvent"/>
+</componentPackage>

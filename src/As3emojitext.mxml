@@ -43,6 +43,8 @@
     private var _builder:EmojiTextAreaBuilder;
     private var _emojiTextArea:EmojiTextArea;
 
+		[Embed(source="assets/46.gif")] [Bindable] private var emoji1 : Class;
+/*
 		[Embed(source="icons/1.gif")] [Bindable] private var emoji1 : Class;
 		[Embed(source="icons/2.gif")] [Bindable] private var emoji2 : Class;
 		[Embed(source="icons/3.gif")] [Bindable] private var emoji3 : Class;
@@ -405,6 +407,7 @@
 		[Embed(source="icons/10116.gif")] [Bindable] private var emoji10116 : Class;
 		[Embed(source="icons/10117.gif")] [Bindable] private var emoji10117 : Class;
 		[Embed(source="icons/10118.gif")] [Bindable] private var emoji10118 : Class;
+                */
 
 
     private function start():void
@@ -419,6 +422,8 @@
         var format2ID:uint = _builder.genPatternFormat('[a:', ']');
 
         
+   _builder.registerByDisplayObject(format1ID, '1', new emoji1());
+        /*
    _builder.registerByDisplayObject(format1ID, '1', new emoji1());
    _builder.registerByDisplayObject(format1ID, '2', new emoji2());
    _builder.registerByDisplayObject(format1ID, '3', new emoji3());
@@ -776,6 +781,7 @@
    _builder.registerByDisplayObject(format2ID, '116', new emoji10116());
    _builder.registerByDisplayObject(format2ID, '117', new emoji10117());
    _builder.registerByDisplayObject(format2ID, '118', new emoji10118());
+   */
 
         // set listeners
         _builder.addEventListener(EmojiTextAreaBuildEvent.BUILT, builtHandler);

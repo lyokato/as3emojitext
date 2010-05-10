@@ -16,7 +16,17 @@
     <source-path>
       <path-element>src</path-element>
     </source-path>
+
+    <namespaces>
+      <namespace>
+      <uri>http://coderepos.org</uri>
+      <manifest>Manifest.xml</manifest>
+      </namespace>
+    </namespaces>
   </compiler>
+  <include-namespaces>
+    <uri>http://coderepos.org</uri>
+  </include-namespaces>
   <include-classes>
       <class>org.coderepos.text.EmojiTextArea</class>
       <class>org.coderepos.text.EmojiTextAreaBuilder</class>
@@ -29,6 +39,6 @@
     <language>EN</language>
     <title>AS3 TextArea which includes some Emoji characters</title>
   </metadata>
-  <output>bin/as3emojitext-1_0_1.swc</output>
+  <output>bin/as3emojitext-1_0_2.swc</output>
 </flex-config>
 
